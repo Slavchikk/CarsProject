@@ -7,58 +7,72 @@
     tools:context=".addCars">
 
 
-    <TextView
-        android:id="@+id/txtBrand"
-        android:layout_width="105dp"
-        android:layout_height="34dp"
-        android:hint="Марка"
-        android:layout_marginTop="144dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtModel"
-        android:layout_width="105dp"
-        android:layout_height="34dp"
-        android:hint="Модель"
-        android:layout_marginTop="56dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtBrand" />
-
-    <TextView
+    <EditText
         android:id="@+id/txtPrice"
         android:layout_width="105dp"
         android:layout_height="34dp"
+        android:layout_marginTop="52dp"
         android:hint="Цена"
-        android:layout_marginTop="44dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtModel" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnInsert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:background="@drawable/buttons"
-        android:text="Изменить и сохранить"
+    <EditText
+        android:id="@+id/txtModel"
+        android:layout_width="103dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="328dp"
+        android:hint="Модель"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.837"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtBrand"
+        android:layout_width="105dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="328dp"
+        android:hint="Марка"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.196"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="124dp"
         android:background="@drawable/buttons"
-        android:text="Назад в главное меню"
+        android:text="Назад"
+        android:onClick="BackMenu"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.773"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnInsert" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnInsert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="124dp"
+        android:background="@drawable/buttons"
+        android:onClick="AddCars"
+        android:text="Добавить"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.26"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
+
+    <ImageView
+        android:onClick="AddPhoto"
+        android:id="@+id/imageView"
+        android:layout_width="171dp"
+        android:layout_height="156dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 </androidx.constraintlayout.widget.ConstraintLayout>

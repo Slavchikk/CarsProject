@@ -1,14 +1,16 @@
+
+
 package com.example.carsproject;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
+import android.content.Intent;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class AdapterCars  extends BaseAdapter {
@@ -33,22 +35,11 @@ public class AdapterCars  extends BaseAdapter {
     @Override
     public long getItemId(int i)
     {
-        return carsList.get(i).getID();
+        return carsList.get(i).getId_cars();
     }
 
-    private Bitmap getUserImage(String encodedImg)
-    {
 
-        if(encodedImg!=null&& !encodedImg.equals("null")) {
-            byte[] bytes = Base64.decode(encodedImg, Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        }
-        else
-        {
-            return null;
 
-        }
-    }
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
@@ -58,14 +49,27 @@ public class AdapterCars  extends BaseAdapter {
         TextView Price = v.findViewById(R.id.txtPrice);
         ImageView imageView = v.findViewById(R.id.imageView2);
         Cars cars = carsList.get(i);
-        Model.setText(cars.getModel());
-        Brand.setText(cars.getBrand());
+        Model.setText(cars.getCarsModel());
+        Brand.setText(cars.getCarsBrand());
         Price.setText(Integer.toString(cars.getPrice()));
+        DecodeImage dcd = new DecodeImage(mContext);
+        imageView.setImageBitmap(dcd.getUserImage(cars.getImage()));
 
         //  imageView.setImageBitmap(getUserImage(mask.get()));
 
-
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, insertCars.class);
+                intent.putExtra(Cars.class.getSimpleName(), cars);
+                mContext.startActivity(intent);
+            }
+        });
         return v;
     }
 }
+
+
+
+
 

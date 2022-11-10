@@ -1,32 +1,30 @@
 package com.example.carsproject;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Cars implements Parcelable {
-    private int ID;
-    private int price;
-    private String Model;
-    private String Brand;
-    private String ArticleNumber;
+    public Integer id_cars;
+    public String carsBrand;
+    public String carsModel;
+    public int price;
+    public String image;
 
-    public Cars(int id_cars, int price, String carsBrand, String carsModel, String articleNumber) {
-        this.ID = id_cars;
+    public Cars(Integer id_cars, String carsBrand, String carsModel, int price, String image) {
+        this.id_cars = id_cars;
+        this.carsBrand = carsBrand;
+        this.carsModel = carsModel;
         this.price = price;
-        this.Model = carsModel;
-        this.Brand = carsBrand;
-        ArticleNumber = articleNumber;
+        this.image = image;
     }
 
     protected Cars(Parcel in) {
-        ID = in.readInt();
+        id_cars = in.readInt();
+        carsBrand = in.readString();
+        carsModel = in.readString();
         price = in.readInt();
-        Model = in.readString();
-        Brand = in.readString();
-        ArticleNumber = in.readString();
+        image = in.readString();
     }
-
     public static final Creator<Cars> CREATOR = new Creator<Cars>() {
         @Override
         public Cars createFromParcel(Parcel in) {
@@ -40,57 +38,65 @@ public class Cars implements Parcelable {
     };
 
 
-    public void setID(int id_cars) {
-        this.ID = id_cars;
+
+
+
+
+    public void setId_cars(Integer id_cars) {
+        this.id_cars = id_cars;
+    }
+
+    public void setCarsBrand(String carsBrand) {
+        this.carsBrand = carsBrand;
+    }
+
+    public void setCarsModel(String carsModel) {
+        this.carsModel = carsModel;
     }
 
     public void setPrice(int price) {
         this.price = price;
     }
 
-    public void setModel(String model) {
-        Model = model;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public void setBrand(String brand) {
-        Brand = brand;
-    }
-
-    public void setArticleNumber(String articleNumber) {
-        ArticleNumber = articleNumber;
-    }
 
     @Override
     public int describeContents() {
         return 0;
     }
-
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(ID);
-        parcel.writeInt(price);
-        parcel.writeString(Model);
-        parcel.writeString(Brand);
-        parcel.writeString(ArticleNumber);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id_cars);
+        dest.writeString(carsBrand);
+        dest.writeString(carsModel);
+        dest.writeInt(price);
+        dest.writeString(image);
+    }
+
+    public int getId_cars() {
+        return id_cars;
+    }
+
+    public String getCarsBrand() {
+        return carsBrand;
+    }
+
+    public String getCarsModel() {
+        return carsModel;
     }
 
     public int getPrice() {
         return price;
     }
 
-    public String getModel() {
-        return Model;
+    public String getImage() {
+        return image;
     }
 
-    public String getBrand() {
-        return Brand;
-    }
 
-    public String getArticleNumber() {
-        return ArticleNumber;
-    }
 
-    public int getID() {
-        return ID;
-    }
 }
+
