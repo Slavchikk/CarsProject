@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Cars implements Parcelable {
+
     public Integer id_cars;
     public String carsBrand;
     public String carsModel;

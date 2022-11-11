@@ -1,8 +1,10 @@
 package com.example.carsproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.InputStream;
@@ -34,6 +38,10 @@ public class insertCars extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        getSupportActionBar().setCustomView(R.layout.toolbar_title_layout);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.teal_200)));
         setContentView(R.layout.activity_insert_cars);
         arg = getIntent().getExtras();
         cars = arg.getParcelable(Cars.class.getSimpleName());
@@ -77,6 +85,47 @@ public class insertCars extends AppCompatActivity {
     }
 
 
+    public void ShowError(String ret)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle("Ошибка при вводе")
+                .setMessage(ret)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private String checkData(String model, String brand, String price){
+        String ret = "";
+        if(model.isEmpty())
+        {
+            ret +=" Введите модель \n";
+        }
+        if(brand.isEmpty())
+        {
+            ret+= " Ведите марку \n";
+
+        }
+        if(price.isEmpty())
+        {
+            ret+=" Введите цену \n";
+        }
+        try {
+            int a = Integer.parseInt(price);
+        }
+        catch(Exception e){
+            ret+= " Цена введена некоректно \n";
+        }
+
+        return ret;
+    }
     private void DataPut(Cars cars, View v)
     {
         Retrofit retrofit = new Retrofit.Builder()
@@ -133,16 +182,72 @@ public class insertCars extends AppCompatActivity {
 
 
     public void UpdateCars(View v){
-        cars.setCarsBrand(Brand.getText().toString());
-        cars.setCarsModel(Model.getText().toString());
-        cars.setPrice(Integer.parseInt(Price.getText().toString()));
-        EncodeImage encodeImage = new EncodeImage();
-        cars.setImage(encodeImage.Image(bitmap));
-        DataPut(cars, v);
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle("Изменение данных")
+                .setMessage("Вы уверены что хотите изменить?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Да", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+
+
+
+                        String ret = checkData(Brand.getText().toString(), Model.getText().toString(),Price.getText().toString());
+                        if(ret == "") {
+                            cars.setCarsBrand(Brand.getText().toString());
+                            cars.setCarsModel(Model.getText().toString());
+                            cars.setPrice(Integer.parseInt(Price.getText().toString()));
+                            EncodeImage encodeImage = new EncodeImage();
+                            cars.setImage(encodeImage.Image(bitmap));
+                            DataPut(cars, v);
+                        }
+                        else {
+                            ShowError(ret);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        builder.setNegativeButton("Нет", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+
     }
 
     public void DeleteCars(View v){
-        DataDelete(cars,  v);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle("Удаление данных")
+                .setMessage("Вы уверены что хотите удалить?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Да", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                      DataDelete(cars,  v);
+                      dialog.dismiss();
+                    }
+                });
+        builder.setNegativeButton("Нет", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+
     }
 
 }

@@ -1,9 +1,11 @@
 package com.example.carsproject;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,7 +31,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 public class addCars extends AppCompatActivity {
 
-
+    Bundle arg;
+    Cars cars;
     ImageView imageCars;
     Bitmap bitmap=null, b;
     EditText Brand, Model, Price;
@@ -37,8 +40,13 @@ public class addCars extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        getSupportActionBar().setCustomView(R.layout.toolbar_title_layout);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.teal_200)));
         setContentView(R.layout.activity_add_cars);
         imageCars = findViewById(R.id.imageView);
+
         b = BitmapFactory.decodeResource(addCars.this.getResources(), R.drawable.images);
         Brand = findViewById(R.id.txtBrand);
         Model = findViewById(R.id.txtModel);
@@ -46,22 +54,64 @@ public class addCars extends AppCompatActivity {
         imageCars.setImageBitmap(b);
     }
 
+public void ShowError(String ret)
+{
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder
+            .setTitle("Ошибка при вводе")
+            .setMessage(ret)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+    AlertDialog alert = builder.create();
+    alert.show();
+}
+
 
     public void AddCars(View v){
 
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle("Добавление данных")
+                .setMessage("Вы уверены что хотите добавить?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Да", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+
+                        EncodeImage encodeImage = new EncodeImage();
+
+                        String ret = checkData(Brand.getText().toString(), Model.getText().toString(),Price.getText().toString());
+                        if(ret == "")
+
+                            postData(Brand.getText().toString(), Model.getText().toString(), Integer.parseInt(Price.getText().toString()), encodeImage.Image(bitmap), v);
+                        else {
+                            ShowError(ret);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        builder.setNegativeButton("Нет", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
 
 
-        EncodeImage encodeImage = new EncodeImage();
-       String ret = checkData(Brand.getText().toString(), Model.getText().toString(),Price.getText().toString());
-       if(ret == "")
-        postData(Brand.getText().toString(), Model.getText().toString(), Integer.parseInt(Price.getText().toString()), encodeImage.Image(bitmap), v);
-        else{
 
-       }
     }
 
-    public String checkData(String model, String brand, String price){
+    private String checkData(String model, String brand, String price){
         String ret = "";
         if(model.isEmpty())
         {
@@ -85,6 +135,7 @@ public class addCars extends AppCompatActivity {
 
         return ret;
     }
+
     private void postData(String model, String brand, int price, String image, View v) {
 
 
