@@ -1,7 +1,9 @@
 package com.example.carsproject;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -44,6 +46,69 @@ public class addCars extends AppCompatActivity {
         imageCars.setImageBitmap(b);
     }
 
+
+    public void AddCars(View v){
+
+
+
+
+        EncodeImage encodeImage = new EncodeImage();
+       String ret = checkData(Brand.getText().toString(), Model.getText().toString(),Price.getText().toString());
+       if(ret == "")
+        postData(Brand.getText().toString(), Model.getText().toString(), Integer.parseInt(Price.getText().toString()), encodeImage.Image(bitmap), v);
+        else{
+
+       }
+    }
+
+    public String checkData(String model, String brand, String price){
+        String ret = "";
+        if(model.isEmpty())
+        {
+            ret +=" Введите модель \n";
+        }
+        if(brand.isEmpty())
+        {
+            ret+= " Ведите марку \n";
+
+        }
+        if(price.isEmpty())
+        {
+            ret+=" Введите цену \n";
+        }
+        try {
+            int a = Integer.parseInt(price);
+        }
+        catch(Exception e){
+            ret+= " Цена введена некоректно \n";
+        }
+
+        return ret;
+    }
+    private void postData(String model, String brand, int price, String image, View v) {
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://ngknn.ru:5001/ngknn/КарзиновВА/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RetrofitApi retrofitAPI = retrofit.create(RetrofitApi.class);
+        Cars modal = new Cars(null, model, brand, price, image);
+        Call<Cars> call = retrofitAPI.createPost(modal);
+        call.enqueue(new Callback<Cars>() {
+            @Override
+            public void onResponse(Call<Cars> call, Response<Cars> response) {
+                Toast.makeText(addCars.this, "Данные добавлены", Toast.LENGTH_SHORT).show();
+                BackMenu(v);
+            }
+
+            @Override
+            public void onFailure(Call<Cars> call, Throwable t) {
+                Toast.makeText(addCars.this, "Ошибка", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private final ActivityResultLauncher<Intent> pickImg = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK) {
             if (result.getData() != null) {
@@ -63,36 +128,6 @@ public class addCars extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         pickImg.launch(intent);
     }
-    public void AddCars(View v){
-
-        EncodeImage encodeImage = new EncodeImage();
-        postData(Brand.getText().toString(), Model.getText().toString(), Integer.parseInt(Price.getText().toString()), encodeImage.Image(bitmap), v);
-
-    }
-    private void postData(String name, String country, int year, String image, View v) {
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ngknn.ru:5001/ngknn/КарзиновВА/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RetrofitApi retrofitAPI = retrofit.create(RetrofitApi.class);
-        Cars modal = new Cars(null, name, country, year, image);
-        Call<Cars> call = retrofitAPI.createPost(modal);
-        call.enqueue(new Callback<Cars>() {
-            @Override
-            public void onResponse(Call<Cars> call, Response<Cars> response) {
-                Toast.makeText(addCars.this, "Данные добавлены", Toast.LENGTH_SHORT).show();
-                BackMenu(v);
-            }
-
-            @Override
-            public void onFailure(Call<Cars> call, Throwable t) {
-                Toast.makeText(addCars.this, "Ошибка", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
 
 
 

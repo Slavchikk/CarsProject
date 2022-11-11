@@ -9,8 +9,8 @@
 
     <EditText
         android:id="@+id/txtPrice"
-        android:layout_width="105dp"
-        android:layout_height="34dp"
+        android:layout_width="119dp"
+        android:layout_height="53dp"
         android:layout_marginTop="52dp"
         android:hint="Цена"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,8 +19,8 @@
 
     <EditText
         android:id="@+id/txtModel"
-        android:layout_width="103dp"
-        android:layout_height="36dp"
+        android:layout_width="124dp"
+        android:layout_height="54dp"
         android:layout_marginTop="328dp"
         android:hint="Модель"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,8 +30,8 @@
 
     <EditText
         android:id="@+id/txtBrand"
-        android:layout_width="105dp"
-        android:layout_height="34dp"
+        android:layout_width="121dp"
+        android:layout_height="50dp"
         android:layout_marginTop="328dp"
         android:hint="Марка"
         app:layout_constraintEnd_toEndOf="parent"

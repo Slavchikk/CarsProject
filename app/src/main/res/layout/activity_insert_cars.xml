@@ -23,8 +23,8 @@
 
     <EditText
         android:id="@+id/txtModel"
-        android:layout_width="105dp"
-        android:layout_height="34dp"
+        android:layout_width="124dp"
+        android:layout_height="46dp"
 
         android:layout_marginTop="76dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,8 +34,8 @@
 
     <EditText
         android:id="@+id/txtBrand"
-        android:layout_width="105dp"
-        android:layout_height="34dp"
+        android:layout_width="122dp"
+        android:layout_height="49dp"
 
         android:layout_marginTop="76dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,8 +45,8 @@
 
     <EditText
         android:id="@+id/txtPrice"
-        android:layout_width="105dp"
-        android:layout_height="34dp"
+        android:layout_width="130dp"
+        android:layout_height="47dp"
 
         android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"

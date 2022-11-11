@@ -1,17 +1,18 @@
-
-
-
 package com.example.carsproject;
-
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,21 +38,100 @@ public class MainActivity extends AppCompatActivity {
     TextView txtModel;
     TextView txtID;
     TextView image;
+    EditText edFind;
+    ListView lstCars;
+    Spinner spinner;
     private List<Cars> listCars = new ArrayList<>();
-
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        lstCars = findViewById(R.id.lvData);
 
         ListView ivProducts = findViewById(R.id.lvData);//Находим лист в который будем класть наши объекты
         pAdapter = new AdapterCars(MainActivity.this, listCars); //Создаем объект нашего адаптера
         ivProducts.setAdapter(pAdapter);  //Cвязывает подготовленный список с адаптером
 
-        new GetProducts().execute(); //Подключение к нашей API в отдельном потоке
+        //new GetProducts().execute(); //Подключение к нашей API в отдельном потоке
+        String[]items = {"<по умолчанию>","По марке","По модели", "По цене"};
+        spinner = findViewById(R.id.spinner);
+        edFind = findViewById(R.id.edfind);
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(edFind.getText().toString().isEmpty()){
+                    Sort(listCars);
+                }
+                else{
+                    Search();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
+        edFind.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { // реальное время dude...
+                Search();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void Search(){
+        List<Cars> lstFilter = listCars.stream().filter(x-> (x.carsModel.toLowerCase(Locale.ROOT).contains(edFind.getText().toString().toLowerCase(Locale.ROOT)))).collect(Collectors.toList());
+        Sort(lstFilter);
+    }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void Sort(List<Cars> list){
+        lstCars.setAdapter(null);
+
+        switch(spinner.getSelectedItemPosition()){
+            case 0:
+                if(edFind.getText().toString().isEmpty()){
+                    new GetProducts().execute();
+                }
+                break;
+            case 1:
+                Collections.sort(list, Comparator.comparing(Cars::getCarsBrand));
+                break;
+            case 2:
+                Collections.sort(list, Comparator.comparing(Cars::getCarsModel));
+
+                break;
+            case 3:
+                Collections.sort(list, Comparator.comparing(Cars::getPrice));
+
+                break;
+            default:
+                break;
+        }
+       SetAdapter(list);
+    }
+
+
+    public void SetAdapter(List<Cars> list){
+        pAdapter = new AdapterCars(MainActivity.this,list);
+        lstCars.setAdapter(pAdapter);
+        pAdapter.notifyDataSetInvalidated();
 
     }
 
