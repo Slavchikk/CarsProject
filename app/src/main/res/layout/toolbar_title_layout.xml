@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="#0F427A"
         android:gravity="center"
-        android:text="SmartPhone"
+        android:text="CarsShop"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
